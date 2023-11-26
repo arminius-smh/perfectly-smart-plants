@@ -1,3 +1,5 @@
+// Toggle built-in LED via MQTT for home asssitant
+
 #include <PubSubClient.h>
 #include <WiFi.h>
 
@@ -55,7 +57,7 @@ void connectMQTT() {
     while (!client.connected()) {
         Serial.println("Connecting to MQTT...");
 
-        if (client.connect("ESP8266Client", mqtt_user, mqtt_password)) {
+        if (client.connect("ESP32Client", mqtt_user, mqtt_password)) {
             Serial.println("Connected to MQTT");
             client.subscribe(mqtt_topic_set);
             client.subscribe(mqtt_topic_get);
