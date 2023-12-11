@@ -6,7 +6,7 @@ Table of Contents
 
 ## Connect ESP32 to Home Assisstant via MQTT
 
-## Setup MQTT Broker
+### Setup MQTT Broker
 
 options to setup MQTT
 - Self host e.g. via docker [eclipse-mosquitto](https://hub.docker.com/_/eclipse-mosquitto)
@@ -30,7 +30,7 @@ https://espressif.github.io/arduino-esp32/package_esp32_index.json
 9. Select your Board in **Tools > Board** e.g. **ESP32 Dev Module**
 10. Select the Port in **Tools > Port**
 11. Open [ESP32 Mqtt implementation](esp32/test/mqtt/mqtt.ino) in Arduino
-12. Fill out **ssid**, **password**, **mqtt_server**, **mqtt_topic**, **mqtt_topic_get**, **mqtt_user**, **mqtt_password**, **mqtt_port**
+12. Fill out **LED_PIN**, **ssid**, **password**, **mqtt_server**, **mqtt_topic**, **mqtt_topic_get**, **mqtt_user**, **mqtt_password**, **mqtt_port**
 13. Monitor via **Tools > Serial Monitor** if everything is working
 14. Click Upload in Arduino IDE
 
