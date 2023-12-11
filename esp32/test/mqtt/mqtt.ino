@@ -3,6 +3,9 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
 
+// Setup LED pin
+const int LED_PIN = -1;
+
 // Wifi Setup
 const char *ssid = "ssid";
 const char *password = "password";
@@ -20,7 +23,7 @@ PubSubClient client(espClient);
 
 void setup() {
     Serial.begin(115200);
-    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(LED_PIN, OUTPUT);
 
     connectWIFI();
 
@@ -75,14 +78,14 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
     if (String(topic) == mqtt_topic_set) {
         if (payload[0] == '1') {
-            digitalWrite(LED_BUILTIN, LOW);
+            digitalWrite(LED_PIN, HIGH);
             Serial.println("LED turned ON");
-            client.publish(mqtt_topic_get, String(!digitalRead(LED_BUILTIN)).c_str(), true);
+            client.publish(mqtt_topic_get, String(digitalRead(LED_PIN)).c_str(), true);
             Serial.println("Send State: ON");
         } else if (payload[0] == '0') {
-            digitalWrite(LED_BUILTIN, HIGH);
+            digitalWrite(LED_PIN, LOW);
             Serial.println("LED turned OFF");
-            client.publish(mqtt_topic_get, String(!digitalRead(LED_BUILTIN)).c_str(), true);
+            client.publish(mqtt_topic_get, String(digitalRead(LED_PIN)).c_str(), true);
             Serial.println("Send State: OFF");
         }
     }
