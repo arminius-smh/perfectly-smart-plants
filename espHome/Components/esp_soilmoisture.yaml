@@ -1,0 +1,50 @@
+esphome:
+  name: esp-soilmoisture
+  friendly_name: esp_soilMoisture
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "mqtu0IutMhEx/7ETMqTFNZwsynrFonAW4730Fiw7OzE="
+
+ota:
+  password: "c8b3f3b627cb4789f94943b262af5559"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp-Soilmoisture"
+    password: "qVWKj1t9fFwJ"
+
+captive_portal:
+
+sensor:
+  - platform: adc
+    pin: GPIO32
+    name: "Capacative Soil Moisture Sensor v1.2"
+    update_interval: 500ms # update later after testing
+    attenuation: 11db
+    unit_of_measurement: "%"
+    filters:
+      - lambda: |-
+          if (x > 3.08) {
+            return 0;
+          } else if (x < 1.27) {
+            return 100;
+          } else {
+            return (3.08-x) / (3.08-1.27) * 100.0;
+          };
+    
+    
+    
