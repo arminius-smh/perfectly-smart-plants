@@ -1,0 +1,5 @@
+mqtt:
+  - sensor:
+      - name: "Perfectly-Smart-Plant-XX-Moisture"
+        state_topic: "psp/sensorXX/moisture"
+        unit_of_measurement: "%"
