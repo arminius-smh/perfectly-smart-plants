@@ -1,5 +1,5 @@
 // Toggle built-in LED via MQTT for home asssitant
-
+#include <Arduino.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
 
@@ -21,28 +21,6 @@ const int mqtt_port = 1883;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-void setup() {
-    Serial.begin(115200);
-    pinMode(LED_PIN, OUTPUT);
-
-    connectWIFI();
-
-    client.setServer(mqtt_server, mqtt_port);
-    client.setCallback(callback);
-    connectMQTT();
-}
-
-void loop() {
-    if (WiFi.status() != WL_CONNECTED) {
-        Serial.println("Not connected to WiFi");
-        connectWIFI();
-    }
-    if (!client.connected()) {
-        Serial.println("Not connected to MQTT");
-        connectMQTT();
-    }
-    client.loop();
-}
 
 void connectWIFI() {
     WiFi.begin(ssid, password);
@@ -90,3 +68,27 @@ void callback(char *topic, byte *payload, unsigned int length) {
         }
     }
 }
+
+void setup() {
+    Serial.begin(115200);
+    pinMode(LED_PIN, OUTPUT);
+
+    connectWIFI();
+
+    client.setServer(mqtt_server, mqtt_port);
+    client.setCallback(callback);
+    connectMQTT();
+}
+
+void loop() {
+    if (WiFi.status() != WL_CONNECTED) {
+        Serial.println("Not connected to WiFi");
+        connectWIFI();
+    }
+    if (!client.connected()) {
+        Serial.println("Not connected to MQTT");
+        connectMQTT();
+    }
+    client.loop();
+}
+
