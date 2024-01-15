@@ -2,16 +2,17 @@
 #include <Arduino.h>
 #include <BH1750.h>
 #include <Wire.h>
+#include <config.h>
 
 // define the wiring settings for I2C interface connection.
-#define BH1750_I2C_SCL 22
-#define BH1750_I2C_SDA 21
+const int SCL_PIN = config.SCL_PIN;
+const int SDA_PIN = config.SDA_PIN;
 
 BH1750 lightMeter;
 
 void setup() {
     Serial.begin(115200);
-    Wire.begin(BH1750_I2C_SDA, BH1750_I2C_SCL);
+    Wire.begin(SDA_PIN, SCL_PIN);
     lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x23, &Wire);
 }
 

@@ -1,12 +1,13 @@
 // Test moisture sensor
 #include <Arduino.h>
+#include <config.h>
 
 // ESP32 pin that connects to AOUT pin of moisture sensor
-const byte MOISTURE_PIN = -1;
+const int MOISTURE_PIN = config.MOISTURE_PIN;
 
 // Calibrated values
-const int dry = -1;
-const int wet = -1;
+const int dry = config.dry;
+const int wet = config.wet;
 
 void setup() {
     Serial.begin(115200);

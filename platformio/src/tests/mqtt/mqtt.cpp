@@ -2,21 +2,22 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
+#include <config.h>
 
 // Setup LED pin
-const int LED_PIN = -1;
+const int LED_PIN = config.LED_PIN;
 
 // Wifi Setup
-const char *ssid = "ssid";
-const char *password = "password";
+const char *ssid = config.wifi_ssid;
+const char *password = config.wifi_password;
 
 // MQTT Setup
-const char *mqtt_server = "mqtt_server_ip";
-const char *mqtt_topic_set = "mqtt_topic_set";
-const char *mqtt_topic_get = "mqtt_topic_get";
-const char *mqtt_user = "mqtt_user";
-const char *mqtt_password = "mqtt_password";
-const int mqtt_port = 1883;
+const char *mqtt_server = config.mqtt_server;
+const char *mqtt_topic_set = config.test_mqtt_topic_set;
+const char *mqtt_topic_get = config.test_mqtt_topic_get;
+const char *mqtt_user = config.mqtt_user;
+const char *mqtt_password = config.mqtt_password;
+const int mqtt_port = config.mqtt_port;
 
 WiFiClient espClient;
 PubSubClient client(espClient);

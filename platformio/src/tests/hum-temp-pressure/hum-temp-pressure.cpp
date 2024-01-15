@@ -11,8 +11,7 @@ void setup() {
     Serial.begin(115200);
     if (!bme.begin(0x76, &Wire)) {
         Serial.println("can NOT initialize BME280.\n");
-        while (true)
-            ;
+        while (true) { ; }
     }
 }
 

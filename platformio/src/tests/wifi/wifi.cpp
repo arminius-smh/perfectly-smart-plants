@@ -1,9 +1,10 @@
 // Connect ESP32 to WIFI
 #include <Arduino.h>
 #include <WiFi.h>
+#include <config.h>
 
-const char *ssid = "ssid";
-const char *password = "password";
+const char *ssid = config.wifi_ssid;
+const char *password = config.wifi_password;
 
 void connectWIFI() {
     WiFi.begin(ssid, password);
