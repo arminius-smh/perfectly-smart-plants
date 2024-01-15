@@ -1,35 +1,46 @@
+#include <Adafruit_BME280.h>
 #include <Arduino.h>
+#include <BH1750.h>
 #include <PubSubClient.h>
 #include <Update.h>
 #include <WebServer.h>
 #include <WiFi.h>
+#include <Wire.h>
+#include <config.h>
 
 // Pins
-const byte LED_PIN = -1;
-const int MOISTURE_PIN = -1;
+const int LED_PIN = config.LED_PIN;
+const int MOISTURE_PIN = config.MOISTURE_PIN;
+const int SCL_PIN = config.SCL_PIN;
+const int SDA_PIN = config.SDA_PIN;
 
 // Wifi
-const char *ssid = "ssid";
-const char *password = "password";
+const char *ssid = config.wifi_ssid;
+const char *password = config.wifi_password;
 
 // MQTT Broker
-const char *mqtt_client_id = "mqtt_client_id";
-const char *mqtt_server = "mqtt_server";
-const char *mqtt_topic = "mqtt_topic";
-const char *mqtt_user = "mqtt_user";
-const char *mqtt_password = "1123";
-const int mqtt_port = 1883;
+const char *mqtt_client_id = config.mqtt_client_id;
+const char *mqtt_server = config.mqtt_server;
+const char *mqtt_topic_moisture = config.mqtt_topic_moisture;
+const char *mqtt_topic_illuminance = config.mqtt_topic_illuminance;
+const char *mqtt_topic_temperature = config.mqtt_topic_temperature;
+const char *mqtt_topic_humidity = config.mqtt_topic_humidity;
+const char *mqtt_user = config.mqtt_user;
+const char *mqtt_password = config.mqtt_password;
+const int mqtt_port = config.mqtt_port;
 
-// Calibrated values
-const int dry = -1;
-const int wet = -1;
+// moisture values
+const int dry = config.dry;
+const int wet = config.wet;
 
 // miscellaneous setup
 const int THRESHOLD = 35;
 int LEDSTATE = 0;
+BH1750 lightMeter;
 WiFiClient espClient;
 PubSubClient client(espClient);
 WebServer server(80);
+Adafruit_BME280 bme;
 unsigned long previousMillisServer = 0;
 unsigned long previousMillisMQTT = 0;
 const long serverInterval = 1;    // Interval for handling server clients in milliseconds
@@ -53,6 +64,7 @@ void connectMQTT() {
     while (!client.connected()) {
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("Not connected to WiFi");
+            WiFi.disconnect();
             connectWIFI();
         }
 
@@ -60,7 +72,10 @@ void connectMQTT() {
 
         if (client.connect(mqtt_client_id, mqtt_user, mqtt_password)) {
             Serial.println("Connected to MQTT");
-            client.subscribe(mqtt_topic);
+            client.subscribe(mqtt_topic_moisture);
+            client.subscribe(mqtt_topic_illuminance);
+            client.subscribe(mqtt_topic_temperature);
+            client.subscribe(mqtt_topic_humidity);
         } else {
             Serial.println("Failed, rc=");
             Serial.println(client.state());
@@ -71,7 +86,10 @@ void connectMQTT() {
 }
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
+    Wire.begin(SDA_PIN, SCL_PIN);
+    lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x23, &Wire);
+    bme.begin(0x76, &Wire);
     pinMode(LED_PIN, OUTPUT);
 
     connectWIFI();
@@ -114,22 +132,28 @@ void setup() {
 void loop() {
     // Get the current time
     unsigned long currentMillis = millis();
-    // Reconnect if failed
+
+    // Reconnect wifi and mqtt if failed
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("Not connected to WiFi");
+        WiFi.disconnect();
         connectWIFI();
     }
     if (!client.connected()) {
         Serial.println("Not connected to MQTT");
+        client.disconnect();
         connectMQTT();
     }
 
+    // web server
     if (currentMillis - previousMillisServer >= serverInterval) {
         server.handleClient();
         previousMillisServer = currentMillis;
     }
+
+    // get sensor data and publish to MQTT
     if (currentMillis - previousMillisMQTT >= mqttInterval) {
-        // Sensor Data
+        // Moisture Sensor Data
         int value = analogRead(MOISTURE_PIN);
         if (value < wet) {
             value = wet;
@@ -137,9 +161,16 @@ void loop() {
             value = dry;
         }
         int percentageHumidity = map(value, wet, dry, 100, 0);
-        Serial.print(percentageHumidity);
-        Serial.println("%");
+        Serial.println("Moisture: " + String(percentageHumidity) + "%");
+        // Light Sensor Data
+        int lux = lightMeter.readLightLevel();
+        Serial.println("Amount of Light: " + String(lux) + "lux");
+        // Temperature and Humidity Sensor Data
+        int hum = bme.readHumidity();
+        int temp = bme.readTemperature();
+        Serial.println("Humidity: " + String(hum) + "%" + "\t Temperature: " + String(temp) + "°C\n");
 
+        // led moisture status
         if (percentageHumidity < THRESHOLD && LEDSTATE == 0) {
             digitalWrite(LED_PIN, HIGH);
             LEDSTATE = 1;
@@ -147,7 +178,14 @@ void loop() {
             digitalWrite(LED_PIN, LOW);
             LEDSTATE = 0;
         }
-        client.publish(mqtt_topic, String(percentageHumidity).c_str(), true);
+
+        // Publish MQTT messages
+        client.publish(mqtt_topic_moisture, String(percentageHumidity).c_str(), true);
+        client.publish(mqtt_topic_illuminance, String(lux).c_str(), true);
+        client.publish(mqtt_topic_temperature, String(temp).c_str(), true);
+        client.publish(mqtt_topic_humidity, String(hum).c_str(), true);
+
+        // Update previousMillis
         previousMillisMQTT = currentMillis;
     }
 }

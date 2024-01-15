@@ -1,6 +1,12 @@
 // Test humidity, temperature and pressure sensor
 #include <Adafruit_BME280.h>
 #include <Arduino.h>
+#include <Wire.h>
+#include <config.h>
+
+// define the wiring settings for I2C interface connection.
+const int SCL_PIN = config.SCL_PIN;
+const int SDA_PIN = config.SDA_PIN;
 
 Adafruit_BME280 bme;
 float temp = 0.00;
@@ -9,10 +15,10 @@ float pressure = 0.00;
 
 void setup() {
     Serial.begin(115200);
+    Wire.begin(SDA_PIN, SCL_PIN);
     if (!bme.begin(0x76, &Wire)) {
         Serial.println("can NOT initialize BME280.\n");
-        while (true)
-            ;
+        while (true) { ; }
     }
 }
 

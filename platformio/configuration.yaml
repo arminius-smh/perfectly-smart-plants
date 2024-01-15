@@ -3,3 +3,19 @@ mqtt:
       - name: "Perfectly-Smart-Plant-XX-Moisture"
         state_topic: "psp/sensorXX/moisture"
         unit_of_measurement: "%"
+        device_class: "moisture"
+  - sensor:
+      - name: "Perfectly-Smart-Plant-XX-Illuminance"
+        state_topic: "psp/sensorXX/illuminance"
+        unit_of_measurement: "lx"
+        device_class: "illuminance"
+  - sensor:
+      - name: "Perfectly-Smart-Plant-XX-Temperature"
+        state_topic: "psp/sensorXX/temperature"
+        unit_of_measurement: "°C"
+        device_class: "temperature"
+  - sensor:
+      - name: "Perfectly-Smart-Plant-XX-Humidity"
+        state_topic: "psp/sensorXX/humidity"
+        unit_of_measurement: "%"
+        device_class: "humidity"
