@@ -16,9 +16,15 @@ options to setup MQTT
 ### PlatformIO
 
 - cli: install [pio](https://docs.platformio.org/en/stable/core/installation/index.html)
-- vscode: [vscode](https://platformio.org/platformio-ide)
+- vscode: install [extension](https://platformio.org/platformio-ide)
+
+#### config
+
+- edit values in [config.cpp](platformio/lib/config/config.cpp)
 
 #### cmds
+
+- have to be executed in root dir
 
 ```bash
 # not needed for vscode extension
@@ -37,4 +43,12 @@ pio run -e hum-temp-pressure -t upload
 
 # serial monitor
 pio device monitor
+
+# problems with flashing
+pio run -t erase
 ```
+
+## Add new Plant
+
+- In Home Assistant Go To 'Settings' -> 'Devices' -> '+ Add Device' -> 'Plant Monitor'
+- In any Dashboard -> 'Add Card' -> 'Custom: Flower Card'
