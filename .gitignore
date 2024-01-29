@@ -7,5 +7,6 @@ platformio/.clang_complete
 platformio/.gcc-flags.json
 platformio/.ccls
 platformio/.ccls-cache
+ccls-cache
 platformio/.cache
 platformio/.gitignore
