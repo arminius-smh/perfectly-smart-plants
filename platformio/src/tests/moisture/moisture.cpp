@@ -9,22 +9,30 @@ const int MOISTURE_PIN = config.MOISTURE_PIN;
 const int dry = config.dry;
 const int wet = config.wet;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 }
 
-void loop() {
+void loop()
+{
     int value = analogRead(MOISTURE_PIN);
 
-    if (wet == -1 && dry == -1) {
+    if (wet == -1 && dry == -1)
+    {
         Serial.print("Moisture value: ");
         Serial.println(value);
 
         delay(500);
-    } else {
-        if (value < wet) {
+    }
+    else
+    {
+        if (value < wet)
+        {
             value = wet;
-        } else if (value > dry) {
+        }
+        else if (value > dry)
+        {
             value = dry;
         }
 

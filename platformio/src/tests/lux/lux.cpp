@@ -10,13 +10,15 @@ const int SDA_PIN = config.SDA_PIN;
 
 BH1750 lightMeter;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     Wire.begin(SDA_PIN, SCL_PIN);
     lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x23, &Wire);
 }
 
-void loop() {
+void loop()
+{
     float lux = lightMeter.readLightLevel();
     Serial.print("Amount of Light: ");
     Serial.print(lux);

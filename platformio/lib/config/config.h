@@ -1,7 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-struct ConfigData {
+struct ConfigData
+{
     const int LED_PIN;
     const int MOISTURE_PIN;
     const int SCL_PIN;

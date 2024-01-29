@@ -5,11 +5,13 @@
 // Setup LED pin
 const int LED_PIN = config.LED_PIN;
 
-void setup() {
+void setup()
+{
     pinMode(LED_PIN, OUTPUT);
 }
 
-void loop() {
+void loop()
+{
     digitalWrite(LED_PIN, HIGH);
     delay(500);
     digitalWrite(LED_PIN, LOW);
