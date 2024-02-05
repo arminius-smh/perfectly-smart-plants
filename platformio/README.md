@@ -31,15 +31,15 @@ options to setup MQTT
 pio project init --ide <ide> # see https://docs.platformio.org/en/stable/integration/ide/index.html#desktop-ides
 
 # build & upload perfectly smart plants
-pio run -e psp -t upload
+pio run -e psp -t erase -t upload -t monitor
 
 # build & upload functionality tests
-pio run -e led -t upload
-pio run -e wifi -t upload
-pio run -e mqtt -t upload
-pio run -e moisture -t upload
-pio run -e lux -t upload
-pio run -e hum-temp-pressure -t upload
+pio run -e led -t erase -t upload
+pio run -e wifi -t erase -t upload -t monitor
+pio run -e mqtt -t erase -t upload -t monitor
+pio run -e moisture -t erase -t upload -t monitor
+pio run -e lux -t erase -t upload -t monitor
+pio run -e hum-temp-pressure -t erase -t upload -t monitor
 
 # serial monitor
 pio device monitor
