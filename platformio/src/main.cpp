@@ -62,6 +62,7 @@ void connectWIFI()
             Serial.println("Failed to connect to WiFi, restarting...");
             ESP.restart();
         }
+        notConnectedCounter++;
     }
 
     if (WiFi.status() == WL_CONNECTED)
