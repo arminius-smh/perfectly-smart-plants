@@ -1,9 +1,0 @@
-- implement [deep sleep](https://www.emadashi.com/2021/01/m5-atom-lite-home-assistant-esphome-and-capacitive-soil-sensor/)
-- how to round lambda filters
-- add pump
-- write custom entety
-- buy relais (?)
-- what is the best way to display information
-- create drawing of breadboard setup
-- create diagram for dashboard.md
--
