@@ -10,3 +10,4 @@ platformio/.ccls-cache
 .ccls-cache
 platformio/.cache
 platformio/.gitignore
+*.vscode*
